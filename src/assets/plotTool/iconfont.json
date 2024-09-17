@@ -1,0 +1,65 @@
+{
+  "id": "4525917",
+  "name": "空间测量",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "13177874",
+      "name": "文字",
+      "font_class": "wenzi",
+      "unicode": "e82d",
+      "unicode_decimal": 59437
+    },
+    {
+      "icon_id": "18175747",
+      "name": "圆点",
+      "font_class": "double-circle",
+      "unicode": "ea6c",
+      "unicode_decimal": 60012
+    },
+    {
+      "icon_id": "5199407",
+      "name": "关闭",
+      "font_class": "guanbi",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "11321310",
+      "name": "清除",
+      "font_class": "qingchu",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "13638737",
+      "name": "面积",
+      "font_class": "mianji",
+      "unicode": "e65e",
+      "unicode_decimal": 58974
+    },
+    {
+      "icon_id": "17867475",
+      "name": "长度",
+      "font_class": "changdu",
+      "unicode": "e711",
+      "unicode_decimal": 59153
+    },
+    {
+      "icon_id": "17930624",
+      "name": "测量工具",
+      "font_class": "celianggongju",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "24277152",
+      "name": "角度",
+      "font_class": "jiaodu",
+      "unicode": "e67c",
+      "unicode_decimal": 59004
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+"type": "FeatureCollection",
+"name": "SignalStation",
+"features": [
+{ "type": "Feature", "properties": { "id": "SS", "plotType": "point", "style": { "colorAlpha": 1, "color": "#ff7300", "outline": false, "heightReference": 3, "pixelSize": 10 }, "Name": "SignalStation" }, "geometry": { "type": "Point", "coordinates": [ 102.802237913760223, 29.367257996465476 ] } }
+]
+}

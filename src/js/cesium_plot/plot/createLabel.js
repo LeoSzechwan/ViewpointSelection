@@ -9,7 +9,7 @@ import util from "../util";
  * @alias BasePlot.CreateLabel
  */
 class CreateLabel extends BasePlot {
-  constructor(viewer, style) {
+  constructor(viewer, style, dataSource) {
     super(viewer, style);
     this.type = "label";
     this.viewer = viewer;
@@ -18,6 +18,7 @@ class CreateLabel extends BasePlot {
      * @property {Cesium.Cartesian3} 坐标
      */
     this.position = null;
+    this.dataSource = dataSource;
   }
 
 
@@ -242,7 +243,7 @@ class CreateLabel extends BasePlot {
   }
   createLabel(cartesian) {
     if (!cartesian) return;
-    let label = this.viewer.entities.add({
+    let label = this.dataSource.entities.add({
       position: cartesian,
       label: {
         text: this.style.text || "--",

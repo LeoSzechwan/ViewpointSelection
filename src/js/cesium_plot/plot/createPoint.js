@@ -2,6 +2,7 @@ import '../prompt/prompt.css'
 import Prompt from '../prompt/prompt.js'
 import BasePlot from './basePlot';
 import util from "../util";
+import { th } from 'element-plus/es/locales.mjs';
 
 /**
  * 点标绘类
@@ -10,7 +11,7 @@ import util from "../util";
  * @alias BasePlot.CreatePoint
  */
 class CreatePoint extends BasePlot {
-	constructor(viewer, style) {
+	constructor(viewer, style, dataSource) {
 		super(viewer, style);
 		this.type = "point";
 		this.viewer = viewer;
@@ -25,6 +26,8 @@ class CreatePoint extends BasePlot {
 		 * @property {Cesium.Cartesian3} 坐标
 		 */
 		this.position = null;
+
+		this.dataSource = dataSource;
 	}
 
 	start(callback) {
@@ -194,7 +197,7 @@ class CreatePoint extends BasePlot {
 	createPoint(cartesian) {
 		if (!cartesian) return;
 		if (this.style.outline) {
-			let point = this.viewer.entities.add({
+			let point = this.dataSource.entities.add({
 				position: cartesian,
 				point: {
 					color: this.style.color instanceof Cesium.Color ? this.style.color : (this.style.color ? Cesium.Color.fromCssColorString(this.style.color).withAlpha(this.style.colorAlpha || 1) : Cesium.Color.WHITE),
@@ -208,7 +211,7 @@ class CreatePoint extends BasePlot {
 			point.objId = this.objId;
 			return point;
 		} else {
-			let point = this.viewer.entities.add({
+			let point = this.dataSource.entities.add({
 				position: cartesian,
 				point: {
 					color: this.style.color instanceof Cesium.Color ? this.style.color : (this.style.color ? Cesium.Color.fromCssColorString(this.style.color).withAlpha(this.style.colorAlpha || 1) : Cesium.Color.WHITE),

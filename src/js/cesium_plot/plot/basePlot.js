@@ -370,7 +370,7 @@ class BasePlot {
         this.properties.attr = attr || {};
     }
 
-    getAttr(){
+    getAttr() {
         return this.properties.attr;
     }
 

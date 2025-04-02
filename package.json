@@ -15,8 +15,12 @@
     "cesium": "^1.119.0",
     "cnpm": "^9.4.0",
     "element-plus": "^2.7.7",
+    "mathjs": "^13.2.0",
     "mitt": "^3.0.1",
     "pinia": "^2.1.7",
+    "quick-hull-2d": "^0.1.0",
+    "quickhull3d": "^3.1.1",
+    "turf": "^3.0.14",
     "unplugin-icons": "^0.19.1",
     "vue": "^3.4.37",
     "yarn": "^1.22.22"

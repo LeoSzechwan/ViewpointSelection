@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"name": "Bridge",
+"features": [
+{ "type": "Feature", "properties": { "id": "B1", "plotType": "point", "style": { "colorAlpha": 1, "color": "#ff00e1", "outline": false, "heightReference": 3, "pixelSize": 15 }, "Name": "Bridge 1#" }, "geometry": { "type": "Point", "coordinates": [ 102.80593899166567, 29.372826393404587 ] } },
+{ "type": "Feature", "properties": { "id": "B2", "plotType": "point", "style": { "colorAlpha": 1, "color": "#ff00e1", "outline": false, "heightReference": 3, "pixelSize": 15 }, "Name": "Bridge 2#" }, "geometry": { "type": "Point", "coordinates": [ 102.789728934566199, 29.362552776616749 ] } },
+{ "type": "Feature", "properties": { "id": "B3", "plotType": "point", "style": { "colorAlpha": 1, "color": "#ff00e1", "outline": false, "heightReference": 3, "pixelSize": 15 }, "Name": "Bridge 3#" }, "geometry": { "type": "Point", "coordinates": [ 102.785185740780463, 29.359860844649742 ] } }
+]
+}

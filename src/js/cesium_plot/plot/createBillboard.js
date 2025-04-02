@@ -8,7 +8,7 @@ import BasePlot from './basePlot';
  * @alias BasePlot.CreateBillboard
  */
 class CreateBillboard extends BasePlot {
-	constructor(viewer, style) {
+	constructor(viewer, style, dataSource) {
 		super(viewer, style);
 
 		this.type = "billboard";
@@ -28,6 +28,8 @@ class CreateBillboard extends BasePlot {
 		 * @property {Cesium.Cartesian3} 图标坐标
 		 */
 		this.position = null;
+
+		this.dataSource = dataSource;
 	}
 
 	/**
@@ -216,7 +218,7 @@ class CreateBillboard extends BasePlot {
 	}
 	createBillboard(cartesian) {
 		if (!cartesian) return;
-		let billboard = this.viewer.entities.add({
+		let billboard = this.dataSource.entities.add({
 			position: cartesian,
 			billboard: {
 				color: this.style.color ? (this.style.color instanceof Cesium.Color ? this.style.color : Cesium.Color.fromCssColorString(this.style.color).withAlpha(this.style.colorAlpha || 1)) : Cesium.Color.WHITE,

@@ -10,7 +10,7 @@ import BasePlot from './basePlot';
  * @alias BasePlot.BasePlot
  */
 class CreateRectangle extends BasePlot {
-  constructor(viewer, style) {
+  constructor(viewer, style, dataSource) {
     super(viewer, style);
     this.type = "rectangle";
     this.viewer = viewer;
@@ -38,6 +38,8 @@ class CreateRectangle extends BasePlot {
 
     this.modifyPoint = null;
     this.pointArr = [];
+
+    this.dataSource = dataSource;
   }
   start(callback) {
     if (!this.prompt && this.promptStyle.show) this.prompt = new Prompt(this.viewer, this.promptStyle);
@@ -165,7 +167,7 @@ class CreateRectangle extends BasePlot {
 
   createRectangle() {
     let that = this;
-    let rectangle = this.viewer.entities.add({
+    let rectangle = this.dataSource.entities.add({
       rectangle: {
         coordinates: new Cesium.CallbackProperty(function () {
           return Cesium.Rectangle.fromCartesianArray([that.leftup, that.rightdown])

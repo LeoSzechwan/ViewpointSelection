@@ -10,7 +10,7 @@ import util from '../util';
  * @alias BasePlot.CreatePolygon
  */
 class CreatePolygon extends BasePlot {
-	constructor(viewer, style) {
+	constructor(viewer, style, dataSource) {
 		super(viewer, style);
 		this.type = "polygon";
 		this.viewer = viewer;
@@ -22,6 +22,8 @@ class CreatePolygon extends BasePlot {
 		}
 		this.style = Object.assign(defaultStyle, style || {});
 		this.outline = null;
+		
+		this.dataSource = dataSource;
 	}
 
 	start(callback) {
@@ -183,8 +185,10 @@ class CreatePolygon extends BasePlot {
 		}
 
 		obj.fill = polygon.fill ? polygon.fill.getValue() : false;
+		obj.clampToGround = true
 		if (polygon.heightReference) {
 			let heightReference = polygon.heightReference.getValue();
+			obj.clampToGround = false;
 			obj.heightReference = Number(heightReference);
 			if(Number(heightReference) == 0){
 				obj.clampToGround = true
@@ -253,11 +257,11 @@ class CreatePolygon extends BasePlot {
 			polygonObj.polygon.height = 0; // 不贴地 必设
 			polygonObj.polygon.perPositionHeight = true; // 启用点的真实高度
 		}
-		return this.viewer.entities.add(polygonObj);
+		return this.dataSource.entities.add(polygonObj);
 	}
 	createPolyline() {
 		let that = this;
-		return this.viewer.entities.add({
+		return this.dataSource.entities.add({
 			polyline: {
 				positions: new Cesium.CallbackProperty(function () {
 					let newPositions = that.positions.concat(that.positions[0]);
@@ -281,29 +285,29 @@ class CreatePolygon extends BasePlot {
 			this.modifyHandler = null;
 		}
 		if (this.entity) {
-			this.viewer.entities.remove(this.entity);
+			this.dataSource.entities.remove(this.entity);
 			this.entity = null;
 		}
 		if (this.polyline) {
-			this.viewer.entities.remove(this.polyline);
+			this.dataSource.entities.remove(this.polyline);
 			this.polyline = null;
 		}
 		this.positions = [];
 		this.style = null;
 		if (this.modifyPoint) {
-			this.viewer.entities.remove(this.modifyPoint);
+			this.dataSource.entities.remove(this.modifyPoint);
 			this.modifyPoint = null;
 		}
 		for (let i = 0; i < this.controlPoints.length; i++) {
 			let point = this.controlPoints[i];
-			this.viewer.entities.remove(point);
+			this.dataSource.entities.remove(point);
 		}
 		this.controlPoints = [];
 		this.state = "no";
 		if (this.prompt) this.prompt.destroy();
 		if (this.polyline) {
 			this.polyline = null;
-			this.viewer.entities.remove(this.polyline);
+			this.dataSource.entities.remove(this.polyline);
 		}
 		this.forbidDrawWorld(false);
 	}

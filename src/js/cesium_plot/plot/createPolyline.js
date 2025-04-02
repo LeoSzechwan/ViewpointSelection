@@ -11,7 +11,7 @@ import Prompt from '../prompt/prompt.js'
  * @alias BasePlot.CreatePolyline
  */
 class CreatePolyline extends BasePlot {
-    constructor(viewer, style) {
+    constructor(viewer, style, dataSource) {
         super(viewer, style);
         style = style || {};
         this.movePush = false;
@@ -20,6 +20,8 @@ class CreatePolyline extends BasePlot {
          * @property {Number} [maxPointNum=Number.MAX_VALUE] 线的最大点位数量
         */
         this.maxPointNum = style.maxPointNum || Number.MAX_VALUE; // 最多点数
+
+        this.dataSource = dataSource;
     }
 
     /**
@@ -200,7 +202,7 @@ class CreatePolyline extends BasePlot {
     createPolyline() {
         let that = this;
 
-        let polyline = this.viewer.entities.add({
+        let polyline = this.dataSource.entities.add({
             polyline: {
                 positions: new Cesium.CallbackProperty(function () {
                     return that.positions

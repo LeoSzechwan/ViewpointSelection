@@ -9,6 +9,7 @@ import CreateRectangle from './createRectangle'
 import CreatePolyline from './createPolyline.js'
 /* import CreateArrow from "./createArrow"; */ // 军事标绘
 import util from '../util.js'
+
 /**
  * 绘制控制类
  * 
@@ -80,6 +81,10 @@ class DrawTool {
 
     this.nowDrawEntityObj = null; // 当前绘制的对象
     this.nowEditEntityObj = null; // 当前编辑的对象
+
+    // 数据集
+    this.dataSource = new Cesium.CustomDataSource('PlotDataSet');
+    this.viewer.dataSources.add(this.dataSource);
   }
 
   /** 
@@ -277,6 +282,7 @@ class DrawTool {
   createByGeojson(feature) {
     const { properties, geometry } = feature;
     let plotType = properties.plotType;
+    let id = properties.id;
     const geoType = geometry.type;
     const coordinates = geometry.coordinates;
     let positions = [];
@@ -298,6 +304,7 @@ class DrawTool {
     }
     this.fireEdit = false;
     let entObj = this.createByPositions({
+      id: id,
       type: drawType,
       styleType: plotType,
       positions: positions,
@@ -333,10 +340,12 @@ class DrawTool {
         geoType = "Polygon";
         break;
       case "point":
+        geoType = "Point";
+        break;
       case "gltfModel":
       case "label":
       case "billboard":
-        geoType = "point";
+        geoType = "Point";
         break;
       default:
         geoType = plotType;
@@ -365,6 +374,7 @@ class DrawTool {
     let feature = {
       "type": "Feature",
       "properties": {
+        "id": item.id,
         "plotType": item.type,
         "style": style,
       },
@@ -459,6 +469,7 @@ class DrawTool {
     }
     this.entityObjArr = [];
     this.nowEditEntityObj = null;
+    this.dataSource.entities.removeAll();
   }
 
   /**
@@ -744,46 +755,61 @@ class DrawTool {
   getEntityObjArr() {
     return this.entityObjArr;
   }
+
+  /**
+   * 缩放至当前所有对象
+   */
+  zoomToDataSet() {
+    this.viewer.zoomTo(this.dataSource)
+  }
+
+  /**
+   * 移动视点至当前所有对象
+   */
+  flyToDataSet() {
+    this.viewer.flyTo(this.dataSource)
+  }
+
   createByType(opt) {
     let entityObj = undefined;
     let name = "";
     opt = opt || {};
     if (opt.type == "polyline") {
-      entityObj = new CreatePolyline(this.viewer, opt.style);
+      entityObj = new CreatePolyline(this.viewer, opt.style, this.dataSource);
       name = "折线_";
     }
 
     if (opt.type == "polygon") {
-      entityObj = new CreatePolygon(this.viewer, opt.style);
+      entityObj = new CreatePolygon(this.viewer, opt.style, this.dataSource);
       name = "面_";
     }
 
     if (opt.type == "billboard") {
-      entityObj = new CreateBillboard(this.viewer, opt.style);
+      entityObj = new CreateBillboard(this.viewer, opt.style, this.dataSource);
       name = "图标_";
     }
 
     if (opt.type == "circle") {
-      entityObj = new CreateCircle(this.viewer, opt.style);
+      entityObj = new CreateCircle(this.viewer, opt.style, this.dataSource);
       name = "圆_";
     }
 
     if (opt.type == "rectangle") {
-      entityObj = new CreateRectangle(this.viewer, opt.style);
+      entityObj = new CreateRectangle(this.viewer, opt.style, this.dataSource);
       name = "矩形_";
     }
 
     if (opt.type == "gltfModel") {
-      entityObj = new CreateGltfModel(this.viewer, opt.style);
+      entityObj = new CreateGltfModel(this.viewer, opt.style, this.dataSource);
       name = "模型_";
     }
 
     if (opt.type == "point") {
-      entityObj = new CreatePoint(this.viewer, opt.style);
+      entityObj = new CreatePoint(this.viewer, opt.style, this.dataSource);
       name = "点_";
     }
     if (opt.type == "label") {
-      entityObj = new CreateLabel(this.viewer, opt.style);
+      entityObj = new CreateLabel(this.viewer, opt.style, this.dataSource);
       name = "文字_";
     }
 
@@ -805,8 +831,7 @@ class DrawTool {
     if (entityObj) entityObj.name = name + new Date().getTime();
     return entityObj;
   }
+
 }
 
 export default DrawTool;
-
-

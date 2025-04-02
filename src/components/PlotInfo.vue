@@ -2,96 +2,68 @@
   <div id="plotinfo-container" v-show="isStartDraw">
     <el-form :model="elementInfo" ref="plotForm">
       <span>{{ `${elementInfo.status}${elementInfo.title}要素` }}</span>
-      <el-form-item
-        label="名称"
-        prop="name"
-        :rules="{
-          required: true,
-          message: '请输入文字',
-          trigger: ['blur', 'change'],
-        }"
-      >
-        <el-input v-model="elementInfo.name"></el-input>
+      <el-form-item label="名称" prop="plot.name" :rules="{
+        required: true,
+        message: '请输入文字',
+        trigger: ['blur', 'change'],
+      }">
+        <el-input v-model="elementInfo.plot.name"></el-input>
       </el-form-item>
-      <el-form-item
-        label="类型"
-        prop="type"
-        v-if="elementInfo.plot.type != 'label'"
-      >
-        <el-select
-          v-model="elementInfo.type"
-          placeholder="请选择类型"
-          value-key="id"
-        >
-          <template #label>
-            <div>
-              <img class="icon" :src="getSvgUrl(elementInfo.type.icon)" />
-              <span>{{ elementInfo.type.name }}</span>
-            </div>
-          </template>
-          <el-option
-            v-for="tp in elementTypes"
-            :key="tp.id"
-            :label="tp.name"
-            :value="tp"
-          >
-            <template #default>
-              <div>
-                <img class="icon" :src="getSvgUrl(tp.icon)" />
-                <span>{{ tp.name }}</span>
-              </div>
-            </template>
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="图标" v-if="elementInfo.plot.type == 'billboard'">
-        <svg
-          aria-hidden="true"
-          :transform="`scale(${elementInfo.plot.style.scale})`"
-          v-if="elementInfo.type.icon"
-        >
-          <use :xlink:href="'#' + elementInfo.type.icon"></use>
-        </svg>
-        <div class="alpha-slider" v-if="elementInfo.type.icon">
-          <span style="width: 60px">大小</span>
-          <el-slider
-            v-model="elementInfo.plot.style.scale"
-            :max="1"
-            :min="0.1"
-            :step="0.1"
-          ></el-slider>
+
+      <el-form-item label="填充颜色" v-if="elementInfo.plot.type != 'label'">
+        <el-color-picker v-model="elementInfo.plot.style.color" style="display: flex" />
+        <div class="alpha-slider">
+          <span style="width: 80px">透明度</span>
+          <el-slider v-model="elementInfo.plot.style.colorAlpha" :max="1" :min="0" :step="0.1"></el-slider>
         </div>
-        <div v-else>无</div>
       </el-form-item>
-      <el-form-item
-        label="文字内容"
-        prop="plot.style.text"
-        v-if="elementInfo.plot.type == 'label'"
-        :rules="{
-          required: true,
-          message: '请输入文字',
-          trigger: ['blur', 'change'],
-        }"
-      >
-        <el-input
-          v-model="elementInfo.plot.style.text"
-          :input-style="{ 
-            fontSize: elementInfo.plot.style.fontSize + 'px',
-            color:elementInfo.plot.style.fillColor,
-            backgroundColor:(elementInfo.plot.style.showBackground?elementInfo.plot.style.backgroundColor:'')
-            }"
-        ></el-input>
+
+      <el-form-item label="大小" v-if="elementInfo.plot.type == 'point'">
+        <el-input-number :min="1" v-model="elementInfo.plot.style.pixelSize" />
+      </el-form-item>
+
+      <el-form-item label="轮廓" v-if="elementInfo.plot.type == 'point' || elementInfo.plot.type == 'polygon'">
+        <div class="options">
+          <el-switch v-model="elementInfo.plot.style.outline"></el-switch>
+          <div v-if="elementInfo.plot.style.outline" class="options">
+            <div class="color-alpha-slider">
+              <span style="width: 40px">颜色</span><el-color-picker v-model="elementInfo.plot.style.outlineColor" />
+              <div class="alpha-slider">
+                <span style="width: 80px">透明度</span>
+                <el-slider v-model="elementInfo.plot.style.outlineColorAlpha" :max="1" :min="0" :step="0.1"></el-slider>
+              </div>
+            </div>
+            <div style="margin-left: 5px">
+              <span style="width: 40px; margin-right: 5px">宽度</span><el-input-number :min="1"
+                v-model="elementInfo.plot.style.outlineWidth" />
+            </div>
+          </div>
+        </div>
+      </el-form-item>
+
+      <el-form-item label="贴合地形" v-if="elementInfo.plot.type == 'polyline' || elementInfo.plot.type == 'polygon'">
+        <el-switch v-model="elementInfo.plot.style.clampToGround"></el-switch>
+      </el-form-item>
+      <el-form-item label="线条宽度" v-if="elementInfo.plot.type == 'polyline'"><el-input-number :min="1"
+          v-model="elementInfo.plot.style.width" />
+      </el-form-item>
+
+      <el-form-item label="文字内容" prop="plot.style.text" v-if="elementInfo.plot.type == 'label'" :rules="{
+        required: true,
+        message: '请输入文字',
+        trigger: ['blur', 'change'],
+      }">
+        <el-input v-model="elementInfo.plot.style.text" :input-style="{
+          fontSize: elementInfo.plot.style.fontSize + 'px',
+          color: elementInfo.plot.style.fillColor,
+          backgroundColor: (elementInfo.plot.style.showBackground ? elementInfo.plot.style.backgroundColor : '')
+        }"></el-input>
       </el-form-item>
       <el-form-item label="文字大小" v-if="elementInfo.plot.type == 'label'">
         <div class="alpha-slider">
           <span style="font-size: 8px">小</span>
-          <el-slider
-            v-model="elementInfo.plot.style.fontSize"
-            :max="32"
-            :min="8"
-            :step="2"
-            style="margin-left: 10px; margin-right: 10px"
-          ></el-slider>
+          <el-slider v-model="elementInfo.plot.style.fontSize" :max="32" :min="8" :step="2"
+            style="margin-left: 10px; margin-right: 10px"></el-slider>
           <span style="font-size: 32px">大</span>
         </div>
       </el-form-item>
@@ -99,30 +71,16 @@
         <el-color-picker v-model="elementInfo.plot.style.fillColor" />
         <div class="alpha-slider">
           <span style="width: 80px">透明度</span>
-          <el-slider
-            v-model="elementInfo.plot.style.fillColorAlpha"
-            :max="1"
-            :min="0"
-            :step="0.1"
-          ></el-slider>
+          <el-slider v-model="elementInfo.plot.style.fillColorAlpha" :max="1" :min="0" :step="0.1"></el-slider>
         </div>
       </el-form-item>
       <el-form-item label="背景板" v-if="elementInfo.plot.type == 'label'">
-        <el-switch
-          v-model="elementInfo.plot.style.showBackground"
-          style="align-self: start"
-        ></el-switch>
+        <el-switch v-model="elementInfo.plot.style.showBackground" style="align-self: start"></el-switch>
         <div v-if="elementInfo.plot.style.showBackground">
-          <span>颜色</span
-          ><el-color-picker v-model="elementInfo.plot.style.backgroundColor" />
+          <span>颜色</span><el-color-picker v-model="elementInfo.plot.style.backgroundColor" />
           <div class="alpha-slider">
             <span style="width: 80px">透明度</span>
-            <el-slider
-              v-model="elementInfo.plot.style.backgroundColorAlpha"
-              :max="1"
-              :min="0"
-              :step="0.1"
-            ></el-slider>
+            <el-slider v-model="elementInfo.plot.style.backgroundColorAlpha" :max="1" :min="0" :step="0.1"></el-slider>
           </div>
         </div>
       </el-form-item>
@@ -145,33 +103,32 @@ import "//at.alicdn.com/t/c/font_4676843_zzpcsy78w0c.js";
 let isStartDraw = ref(false);
 
 let elementInfo = ref({
-  name: "",
-  type: {
-    id: "",
-    name: "",
-    icon: "",
-  },
-  title: "",
   status: "新建",
   plot: {
     type: "",
+    name: "",
     style: {
       text: "",
       fillColor: "#fff",
       fillColorAlpha: 1.0,
+      outline: false,
+      outlineWidth: 1,
+      outlineColor: "#00FFFF",
+      outlineColorAlpha: 1.0,
+      heightReference: 0,
       showBackground: true,
       backgroundColor: "#000",
       backgroundColorAlpha: 1.0,
       scale: 1,
-      clampToGround: true,
-      fontSize: 16,
-      image: null,
       color: "#ff0000",
+      colorAlpha: 1.0,
+      clampToGround: true,
+      width: 3,
+      pixelSize: 10,
+      fontSize: 16,
     },
   },
 });
-
-let elementTypes = ref([]);
 
 // 标绘表单
 let plotForm = ref();
@@ -187,7 +144,7 @@ bus.on("PlotInfo", (flag) => {
   isStartDraw.value = true;
 });
 
-const submit = () => { 
+const submit = () => {
   plotForm.value.validate((validPlot) => {
     if (validPlot) {
       // isStartDraw.value = false;
@@ -210,7 +167,7 @@ const getSvgUrl = (iconId) => {
 <style>
 #plotinfo-container {
   position: absolute;
-  top: 100px;
+  top: 150px;
   right: 5px;
   z-index: 2;
   width: 200px;
@@ -228,7 +185,7 @@ const getSvgUrl = (iconId) => {
 .options {
   display: flex;
   flex-wrap: wrap;
-  width: 300px;
+  width: 100px;
 }
 
 .icon {

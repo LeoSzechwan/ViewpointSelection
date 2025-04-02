@@ -10,7 +10,7 @@ import util from '../util';
  * @alias BasePlot.CreateGltfModel
  */
 class CreateGltfModel extends BasePlot {
-  constructor(viewer, style) {
+  constructor(viewer, style, dataSource) {
     super(viewer, style);
     this.type = "gltfModel";
     style = style || {};
@@ -33,6 +33,8 @@ class CreateGltfModel extends BasePlot {
      */
     this.modelUri = style.uri;
     this.entity = null;
+
+    this.dataSource = dataSource;
   }
 
   start(callback) {
@@ -154,7 +156,7 @@ class CreateGltfModel extends BasePlot {
     let hpr = new Cesium.HeadingPitchRoll(heading, pitch, roll);
     let orientation = Cesium.Transforms.headingPitchRollQuaternion(cartesian, hpr);
 
-    let entity = this.viewer.entities.add({
+    let entity = this.dataSource.entities.add({
       position: cartesian,
       orientation: orientation,
       model: {

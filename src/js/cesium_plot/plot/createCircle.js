@@ -9,7 +9,7 @@ import BasePlot from './basePlot';
  * @alias BasePlot.CreateCircle
  */
 class CreateCircle extends BasePlot {
-  constructor(viewer, style) {
+  constructor(viewer, style, dataSource) {
     super(viewer, style);
     this.type = "circle";
     this.objId = Number(
@@ -36,6 +36,8 @@ class CreateCircle extends BasePlot {
     this.radius = 0.001;
     this.modifyPoint = null;
     this.pointArr = [];
+
+    this.dataSource = dataSource;
   }
 
   /**
@@ -282,7 +284,7 @@ class CreateCircle extends BasePlot {
     } else {
       defauteObj.heightReference = 1;
     } */
-    let ellipse = this.viewer.entities.add({
+    let ellipse = this.dataSource.entities.add({
       position: this.position,
       ellipse: defauteObj,
     });

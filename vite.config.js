@@ -14,7 +14,7 @@ export default defineConfig({
   build:{
     outDir:'story'
   },
-  base: '/story',
+  base: '/',
   plugins: [
     vue(),
     cesium(),

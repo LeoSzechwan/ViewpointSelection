@@ -1,5 +1,6 @@
-# Vue 3 + Vite
+# ViewpointSelection
+Viewpoint Selection for 3D Scene in Map Narratives
+《面向叙事地图的三场场景视点选取》
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+public/data/geojson/A/下面是文章中的数据，都是自己模拟的
+The data under `public/data/geojson/A/` comes from the article and is entirely simulated.
